@@ -1,0 +1,88 @@
+---
+title: "Homework 3"
+author: "Meredith Ludlow"
+date: "September 17, 2018"
+output: html_document
+---
+
+# Question 1 - Cloning a directory
+$ pwd  
+/c/Git  
+$ mkdir DoingDataDirectories  
+$ cd DoingDataDirectories  
+$ git clone https://github.com/awesomedata/awesome-public-datasets.git  
+
+# Question 2
+```{r echo=TRUE}
+# Read in titanic data and assign to variable df.
+df <- read.csv("titanic.csv", header=TRUE)
+# Output the counts of male and female passengers.
+table(df$Sex)
+# Plot the frequency of male and female passengers.
+barplot(table(df$Sex), xlab = "Gender", ylab = "Frequency", main = "Number of Men and Women on the Titanic")
+# Find the mean of the Ages, Survival Rate, and Fare of Passengers.
+df_data <- df[, c(2, 6, 10)]
+df_data2 <- na.omit(df_data)
+sapply(df_data2, mean)
+```
+
+#Question 3
+Define a function that analyzes sleep data.
+
+```{r Echo=TRUE}
+# Read in sleep data
+sleep <- read.csv("sleep_data_01.csv", header=TRUE)
+# Remove any missing data
+sleep2 <- na.omit(sleep)
+# Define the function
+sleep_function <- function(x){
+  median_age = median(x$Age)
+  max_dur = max(x$Duration)
+  min_dur = min(x$Duration)
+  mean_rses = mean(x$RSES)
+  sd_rses = sd(x$RSES)
+  report = data.frame(median_age, mean_rses/5, sd_rses/5, max_dur-min_dur)
+  colnames(report) = c("MedianAge", "SelfEsteem", "SE_SD", "DurationRange")
+  round(report, 2)
+}
+# Run the function on the sleep data.
+sleep_function(sleep2)
+```
+
+# Question 4
+I downloaded the fivethirtyeight package into RStudio using the command  
+install.packages("fivethirtyeight")  
+
+```{r echo=TRUE}
+library(fivethirtyeight)
+# I viewed the data sets in fivethirtyeight using this command: data(package = "fivethirtyeight")
+# Assign the 22nd data set in fivethirtyeight to a variable df
+df <- View(college_grad_students)
+
+# I viewed a more detailed list of the data sets with this command: vignette("fivethirtyeight", package = "fivethirtyeight")
+# THe URL for the article related to this data is http://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/
+
+# Give the dimensions and column names of the data set
+dim(college_grad_students)
+colnames(college_grad_students)
+```
+
+# Question 5
+```{r echo = TRUE}
+# Give the column names and number of columns in college_grad_students dataset
+colnames(college_grad_students)
+ncol(college_grad_students)
+
+# Find the frequency of each major in the dataset
+library(plyr)
+major_count <- count(college_grad_students, "major_category")
+
+# Make a barplot of major_count
+par(las=2)
+barplot(major_count$freq, names.arg = major_count$major_category, horiz = TRUE, main = "Number of College Graduates in each Major", xlab = "Frequency", ylab = "Major", col = 3)
+
+# Write the data to a csv file
+write.csv(college_grad_students, "students.csv")
+```
+
+# Question 6
